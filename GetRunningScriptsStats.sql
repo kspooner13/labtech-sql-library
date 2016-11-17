@@ -1,5 +1,3 @@
-USE labtech;
-
 /*
 
  Description    : Get all Ticket Categories for the ConnectWise (CW) plugin, along with their Ticket Category mappings from LabTech.  Found on ##labtech.
@@ -24,69 +22,75 @@ USE labtech;
 SELECT
     (SELECT COUNT(*) AS total
      FROM runningscripts
-       JOIN computers USING (computerid)
-     WHERE Running = 1)                                                               AS TOTAL_RUNNING_SCRIPTS
-  , (SELECT Run_ScriptID
+         JOIN computers USING (computerid)
+     WHERE running = 1)                                                               AS total_running_scripts,
+    (SELECT run_scriptid
      FROM (SELECT
-               scriptID        AS Run_ScriptID
-             , COUNT(scriptID) AS Run_ScriptID_Count
+               scriptid        AS run_scriptid,
+               COUNT(scriptid) AS run_scriptid_count
            FROM runningscripts
-           GROUP BY scriptID
-           ORDER BY Run_ScriptID_Count DESC
-           LIMIT 1) AS r)                                                             AS Run_Script_ID
-  , (SELECT Run_ScriptID_Count
+           GROUP BY scriptid
+           ORDER BY run_scriptid_count DESC
+           LIMIT 1) AS r)                                                             AS run_script_id,
+    (SELECT run_scriptid_count
      FROM (SELECT
-               scriptID        AS Run_ScriptID
-             , COUNT(scriptID) AS Run_ScriptID_Count
+               scriptid        AS run_scriptid,
+               COUNT(scriptid) AS run_scriptid_count
            FROM runningscripts
-           GROUP BY scriptID
-           ORDER BY Run_ScriptID_Count DESC
-           LIMIT 1) AS rct)                                                           AS Run_ScriptID_Count
-  , (SELECT COUNT(*) AS total
+           GROUP BY scriptid
+           ORDER BY run_scriptid_count DESC
+           LIMIT 1) AS rct)                                                           AS run_scriptid_count,
+    (SELECT COUNT(*) AS total
      FROM runningscripts
-       JOIN computers USING (computerid)
-     WHERE Running = 0 AND TIMESTAMPDIFF(SECOND, Computers.Lastcontact, NOW()) < 300) AS TOTAL_WAITING_SCRIPTS
-  , (SELECT Waiting_ScriptsID
+         JOIN computers USING (computerid)
+     WHERE running = 0 AND TIMESTAMPDIFF(SECOND, computers.lastcontact, NOW()) < 300) AS total_waiting_scripts,
+    (SELECT waiting_scriptsid
      FROM (SELECT
-               scriptID        AS Waiting_ScriptsID
-             , COUNT(scriptID) AS Waiting_ScriptID_Count
+               scriptid        AS waiting_scriptsid,
+               COUNT(scriptid) AS waiting_scriptid_count
            FROM runningscripts
-             JOIN computers USING (computerid)
-           WHERE Running = 0 AND TIMESTAMPDIFF(SECOND, Computers.Lastcontact, NOW()) < 300
-           GROUP BY Waiting_ScriptsID
-           ORDER BY Waiting_ScriptID_Count DESC
-           LIMIT 1) AS WS)                                                            AS Waiting_ScriptsID
-  , (SELECT Waiting_ScriptID_Count
+               JOIN computers USING (computerid)
+           WHERE running = 0 AND TIMESTAMPDIFF(SECOND, computers.lastcontact, NOW()) < 300
+           GROUP BY waiting_scriptsid
+           ORDER BY waiting_scriptid_count DESC
+           LIMIT 1) AS ws)                                                            AS waiting_scriptsid,
+    (SELECT waiting_scriptid_count
      FROM (SELECT
-               scriptID        AS Waiting_ScriptsID
-             , COUNT(scriptID) AS Waiting_ScriptID_Count
+               scriptid        AS waiting_scriptsid,
+               COUNT(scriptid) AS waiting_scriptid_count
            FROM runningscripts
-             JOIN computers USING (computerid)
-           WHERE Running = 0 AND TIMESTAMPDIFF(SECOND, Computers.Lastcontact, NOW()) < 300
-           GROUP BY Waiting_ScriptsID
-           ORDER BY Waiting_ScriptID_Count DESC
-           LIMIT 1) AS WS)                                                            AS Waiting_ScriptID_Count
-  , (SELECT COUNT(*) AS total
+               JOIN computers USING (computerid)
+           WHERE running = 0 AND TIMESTAMPDIFF(SECOND, computers.lastcontact, NOW()) < 300
+           GROUP BY waiting_scriptsid
+           ORDER BY waiting_scriptid_count DESC
+           LIMIT 1) AS ws)                                                            AS waiting_scriptid_count,
+    (SELECT COUNT(*) AS total
      FROM runningscripts
-       JOIN computers USING (computerid)
-     WHERE Running = 0 AND TIMESTAMPDIFF(SECOND, Computers.Lastcontact, NOW()) > 300) AS TOTAL_PENDING_SCRIPTS
-  , (SELECT Pending_ScriptsID
+         JOIN computers USING (computerid)
+     WHERE running = 0 AND TIMESTAMPDIFF(SECOND, computers.lastcontact, NOW()) > 300) AS total_pending_scripts,
+    (SELECT pending_scriptsid
      FROM (SELECT
-               scriptID        AS Pending_ScriptsID
-             , COUNT(scriptID) AS Pending_ScriptID_Count
+               scriptid        AS pending_scriptsid,
+               COUNT(scriptid) AS pending_scriptid_count
            FROM runningscripts
-             JOIN computers USING (computerid)
-           WHERE Running = 0 AND TIMESTAMPDIFF(SECOND, Computers.Lastcontact, NOW()) > 300
-           GROUP BY Pending_ScriptsID
-           ORDER BY Pending_ScriptID_Count DESC
-           LIMIT 1) AS WS)                                                            AS Pending_ScriptsID
-  , (SELECT Pending_ScriptID_Count
+               JOIN computers USING (computerid)
+           WHERE running = 0 AND TIMESTAMPDIFF(SECOND, computers.lastcontact, NOW()) > 300
+           GROUP BY pending_scriptsid
+           ORDER BY pending_scriptid_count DESC
+           LIMIT 1) AS ws)                                                            AS pending_scriptsid,
+    (SELECT pending_scriptid_count
      FROM (SELECT
-               scriptID        AS Pending_ScriptsID
-             , COUNT(scriptID) AS Pending_ScriptID_Count
+               scriptid        AS pending_scriptsid,
+               COUNT(scriptid) AS pending_scriptid_count
            FROM runningscripts
-             JOIN computers USING (computerid)
-           WHERE Running = 0 AND TIMESTAMPDIFF(SECOND, Computers.Lastcontact, NOW()) > 300
-           GROUP BY Pending_ScriptsID
-           ORDER BY Pending_ScriptID_Count DESC
-           LIMIT 1) AS WS)                                                            AS Pending_ScriptID_Count
+               JOIN computers USING (computerid)
+           WHERE running = 0 AND TIMESTAMPDIFF(SECOND, computers.lastcontact, NOW()) > 300
+           GROUP BY pending_scriptsid
+           ORDER BY pending_scriptid_count DESC
+           LIMIT 1) AS ws)                                                            AS pending_scriptid_count
+
+
+
+
+
+

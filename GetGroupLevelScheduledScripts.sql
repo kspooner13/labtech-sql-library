@@ -17,6 +17,8 @@ Table Aliases     :
 
 #todo: combine repeat and schedule columns into single readable columns
 
+SET @group_filter = '5,976,977,978,981,982,983,984,985,986,987,988,989,995,996,1023,1579,1580,1581,1582,1584,1585,1593,1606,1609'; # A set of group ids to filter by.
+
 SELECT
     CONCAT_WS(' - ', Groups.GroupID, Groups.Name)          AS `GroupName`
   , Groups.FullName                                        AS `GroupPath`
@@ -50,6 +52,8 @@ FROM groupscripts AS `ScheduledScripts`
   LEFT JOIN lt_scripts AS `Scripts` ON ScheduledScripts.ScriptID = Scripts.ScriptId
   LEFT JOIN mastergroups AS `Groups` ON ScheduledScripts.GroupID = Groups.GroupID
   LEFT JOIN sensorchecks AS `Searches` ON ScheduledScripts.SearchID = Searches.SensID
+  WHERE FIND_IN_SET(Groups.GroupID,@group_filter) > 0
+  GROUP BY `GroupName`,`ScriptName`
 ORDER BY Groups.FullName ASC;
 
 

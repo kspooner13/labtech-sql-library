@@ -1,5 +1,10 @@
-# LabTech 10.0 SQL Scripts
-This is a collection of SQL Scripts and snippets for LabTech. If you would like to change, add or request something feel free to submit a pull request or contact me in IRC on freenode servers, channel ##labtech, nick jessec.
+# ConnectWise Automate (formerly known as LabTech) 10.5 - 11.0 SQL Scripts
+Misc SQL scripts and snippets for ConnectWise Automate (formerly known as LabTech)
+
+# 11/16/16 Updates
+ - danger folder contains sql that changes the database, use at your own risk
+ - tested queries on LabTech 11.0, cleaned them up a bit and removed one that doesn't work
+ - added two new scripts for pulling groups with exclusions and updating auto join searches on groups
 
 ## LabTech Table Descriptions
 An attempt at describing the purpose of each table in LabTech.

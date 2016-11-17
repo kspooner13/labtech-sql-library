@@ -5,7 +5,7 @@ Source URL        : http://github.com/jesseconnr/labtech-sql-library
 
 Tested Versions   :
   MySQL 5.7
-  LabTech 10.0
+  LabTech 11.0
 
 Table Aliases     :
   AlertTemplates        - alerttemplate
@@ -18,6 +18,7 @@ Table Aliases     :
 SELECT
     CONCAT_WS(' - ', AlertTemplates.AlertActionID, AlertTemplates.Name) AS                          `TemplateName`
   , AlertActions.AlertID
+
   , CONCAT_WS(', ', CASE WHEN (AlertActions.Alertaction & 0x00) = 0x00 AND
                               AlertActions.Message = 'DIVERSION!!!' THEN 'Suppress Alerts' END,
               CASE WHEN (AlertActions.Alertaction & 0x01) = 0x01 THEN 'Raise Alert' END,
@@ -40,6 +41,7 @@ SELECT
               CASE WHEN (AlertActions.Alertaction & 0x20000) = 0x20000 THEN 'Ticket Response' END,
               CASE WHEN (AlertActions.Alertaction & 0x40000) = 0x40000 THEN 'Custom Alert 4' END,
               CASE WHEN (AlertActions.Alertaction & 0x80000) = 0x80000 THEN 'Custom Alert 5' END)   `Error Action`
+
   , CONCAT_WS(', ', CASE WHEN (AlertActions.WarningAction & 0x00) = 0x00 AND
                               AlertActions.Message = 'DIVERSION!!!' THEN 'Suppress Alerts' END,
               CASE WHEN (AlertActions.WarningAction & 0x01) = 0x01 THEN 'Raise Alert' END,
@@ -62,6 +64,7 @@ SELECT
               CASE WHEN (AlertActions.WarningAction & 0x20000) = 0x20000 THEN 'Ticket Response' END,
               CASE WHEN (AlertActions.WarningAction & 0x40000) = 0x40000 THEN 'Custom Alert 4' END,
               CASE WHEN (AlertActions.WarningAction & 0x80000) = 0x80000 THEN 'Custom Alert 5' END) `Warning Action`
+
   , CONCAT_WS(', ', CASE WHEN (AlertActions.DayOfWeek & 0x01) = 0x01 THEN 'Sunday' END,
               CASE WHEN (AlertActions.DayOfWeek & 0x02) = 0x02 THEN 'Monday' END,
               CASE WHEN (AlertActions.DayOfWeek & 0x04) = 0x04 THEN 'Tuesday' END,
@@ -69,6 +72,7 @@ SELECT
               CASE WHEN (AlertActions.DayOfWeek & 0x10) = 0x10 THEN 'Thursday' END,
               CASE WHEN (AlertActions.DayOfWeek & 0x20) = 0x20 THEN 'Friday' END,
               CASE WHEN (AlertActions.DayOfWeek & 0x40) = 0x40 THEN 'Saturday' END)                 `Days`
+
   , AlertActions.TimeStart                                              AS                          `Start Time`
   , AlertActions.TimeEnd                                                AS                          `End Time`
   , IF(AlertActions.ContactId < 0, IF(AlertActions.ContactId = -1, 'Location Contact', 'Computer Contact'),

@@ -5,7 +5,7 @@ Source URL        : http://github.com/jesseconnr/labtech-sql-library
 
 Tested Versions   :
   MySQL 5.7
-  LabTech 10.0
+  LabTech 11.0
 
 Table Aliases     :
   Groups                - mastergroups
@@ -20,6 +20,9 @@ Table Aliases     :
   GroupTemplate         - templates
 
 */
+
+
+SET @parent_group_filter = 'Service Plans'; # Used in the where clause at the bottom.
 
 SELECT *
 FROM
@@ -84,12 +87,14 @@ FROM
      LEFT JOIN `sensorchecks` AS Searches ON Groups.AutoJoinScript = Searches.SensID
      LEFT JOIN `templates` AS GroupTemplate ON Groups.Template = GroupTemplate.TemplateID
      LEFT JOIN `maintenancewindow` AS MaintWindows ON Groups.MaintenanceID = MaintWindows.MaintenanceID
-   ORDER BY `Path` ASC) AS `LabTechGroups`
-WHERE
+   ORDER BY Groups.GroupID ASC, `Path` ASC) AS `LabTechGroups`
+# WHERE
   # LabTechGroups Filtering
-  (`AutoJoinScript` != 'No Agents - Auto Join Prevention') # Exclude Container Groups
-  AND (`Path` != 'Network Devices' AND `Path` NOT LIKE 'Network Devices.%') # Exclude Network Device Groups
-  AND (`Path` != 'Port Management' AND `Path` NOT LIKE 'Port Management.%') # Exclude Port Management Groups
-  AND (`Path` != 'All Clients' AND `Path` NOT LIKE 'All Clients.%') # Exclude The 'All Clients' Group
-  AND (`Path` != '_System Automation.Windows Updates Patch Window Control' AND
-       `Path` NOT LIKE '_System Automation.Windows Updates Patch Window Control.%') # Exclude Patching Groups
+  WHERE `Path` REGEXP concat('^',@parent_group_filter,'$') OR `Path` REGEXP concat('^',@parent_group_filter,'\..+') # Get groups and sub-groups of a specific parent by name.
+  # (`AutoJoinScript` != 'No Agents - Auto Join Prevention') # Exclude Container Groups
+  # AND (`Path` != 'Network Devices' AND `Path` NOT LIKE 'Network Devices.%') # Exclude Network Device Groups
+  # AND (`Path` != 'Port Management' AND `Path` NOT LIKE 'Port Management.%') # Exclude Port Management Groups
+  # AND (`Path` != 'All Clients' AND `Path` NOT LIKE 'All Clients.%') # Exclude The 'All Clients' Group
+  # AND (`Path` != '_System Automation.Windows Updates Patch Window Control' AND
+  #     `Path` NOT LIKE '_System Automation.Windows Updates Patch Window Control.%') # Exclude Patching Groups
+
